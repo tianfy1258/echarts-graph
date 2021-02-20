@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>pyecharts</title>
+  <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+  <script type="text/javascript" src="graph.js"></script>
+</head>
+<body>
+<div id="1" class="chart-container" style="width:1200px; height:800px;"></div>
+<div id="buttons">
+  <button onclick="main()">执行算法</button>
+</div>
+<script>
+  let chart = echarts.init(
+    document.getElementById('1'), 'white', {renderer: 'canvas'});
+  
+  // ============图的构建============
+  
+  mat = [
+    [0, 1, 1, 1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 1, 1, 0, 0],
+    [1, 0, 0, 1, 0, 0, 1, 0],
+    [1, 0, 1, 0, 0, 0, 1, 1],
+    [0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 0]
+  ];
+  
+  // ============设置选项============
+  isDigraph(false); // 是否是有向图
+  setEdgeLength(50); //设置边长度
+  isShowLabel(true); //是否显示边上的标签
+  // ================================
+  
+  
+  // ============构建图============
+  
+  initFromMatrix(mat); // 从邻接矩阵中初始化图
+  
+  // ===============================
+  
+  
+  // 【固定写法】
+  draw(chart); // 画图
+  
+  console.log(g);
+  
+  // 主程序函数
+  async function main() {
+    freezeGraph(); //【固定写法】 首先固定图表，防止力引导图发生变化
+
+//==========在下面编写主函数==========
+    
+    /**
+     * 可选的函数如下：
+     *
+     * 访问某个节点
+     * visitNode(1);
+     *
+     * 访问某个边
+     * visitEdge(1, 2);
+     *
+     * 程序睡眠指定毫秒
+     * await sleep(1000)
+     *
+     */
+      
+      
+      // 下面是一个DFS示例
+    
+    let queue = [];
+    let visited = {};
+    
+    queue.push(6); //将初始节点加入队列
+    visited[6] = true; //设置节点6已访问
+    visitNode(6); // 生成访问动画
+    await sleep(1000); // 休眠1秒
+    
+    
+    while (queue.length > 0) {
+      // 找到最后一个节点
+      let node = queue[queue.length - 1];
+      let friend = -1;
+      let index = 0;
+      
+      //寻找符合条件的邻接节点
+      while (index < mat[0].length) {
+        // (node和index有边 && index节点未被访问 && 访问的不是node本身)
+        
+        if (mat[node][index] !== 0 && !visited[index] && index !== node) {
+          friend = index;
+        }
+        index += 1
+      }
+      //如果找到了符合这样的邻接节点
+      if (friend >= 0) {
+        queue.push(friend); //将节点加入队列
+        visited[friend] = true; //设置节点6已访问
+        visitNode(friend); // 生成节点访问动画
+        visitEdge(node, friend); // 生成边访问动画
+        await sleep(1000); // 休眠1秒
+      }
+      
+      //没有找到符合条件的邻接节点
+      else {
+        queue.pop(); //删除最后一个节点
+      }
+    }
+  
+    alert("执行完毕！");
+
+//===================================
+  
+  }
+
+</script>
+</body>
+</html>
